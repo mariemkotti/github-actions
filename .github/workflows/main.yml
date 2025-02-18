@@ -1,19 +1,34 @@
-name: Test Project
+name: CI Pipeline
 
+# Trigger the workflow on push or pull request to the main branch
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
 
+# Jobs to run
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: node:20
+  build:
+    runs-on: ubuntu-latest # Specify the operating system
+
     steps:
-      - uses: actions/checkout@v3
+      # Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js (example for a Node.js project)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+          node-version: 16
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run tests
+      - name: Run tests
+        run: npm test
